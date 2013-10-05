@@ -1,7 +1,7 @@
-ww : a "lexerless" LALR(1) parser generator allowing dynamic grammar extension
-(named for Walt Whitman, the great Manish Tripathi's favorite poet)
+<h1>ww : a "lexerless" LALR(1) parser generator allowing dynamic grammar extension</h1>
+<h2>(named for Walt Whitman, the great Manish Tripathi's favorite poet)</h2>
 
-"Do I contradict myself?  Very well, then, I contradict myself." -- Walt Whitman
+> "Do I contradict myself?  Very well, then, I contradict myself." -- *Walt Whitman*
 
 This attitude is completely bonkers.  We only want to admit self-consistent programs, and by extension efficient, deterministic parsers for _unambiguous_ grammars.
 
