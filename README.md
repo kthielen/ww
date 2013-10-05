@@ -1,5 +1,5 @@
-<h1>ww : a "lexerless" LALR(1) parser generator allowing dynamic grammar extension</h1>
-<h2>(named for Walt Whitman, the great Manish Tripathi's favorite poet)</h2>
+<h2>ww : a "lexerless" dynamic LALR(1) parser generator</h2>
+<h3>(named for Walt Whitman, the great Manish Tripathi's favorite poet)</h3>
 
 > "Do I contradict myself?  Very well, then, I contradict myself." -- *Walt Whitman*
 
@@ -41,5 +41,5 @@ syntax {
 1 + 3^2*2
 ```
 
-References:
+References:<br/>
 [1] - http://3e8.org/pub/scheme/doc/parsing/Efficient%20Computation%20of%20LALR(1)%20Look-Ahead%20Sets.pdf
