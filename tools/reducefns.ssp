@@ -1,0 +1,107 @@
+<%
+; reducefns.ssp - A template for generating the C function bindings for parser reducefns
+(define max-args 15)
+
+(define (gen-cfuncs n)
+ (set stdout (write-file "../include/ww/reducefns.hpp"))
+%>
+
+/*
+ * NOTE: This is a generated file meant to be included inline -- it shouldn't be included explicitly or modified
+ */
+
+<%
+; generate each binder up to N
+(iterate 0 (<= n) (dy+ 1)
+ (lambda (v)
+  (define (gen-cfbind fprefix rtype)
+   (define arg-tys (map (lambda (v) (concat "A" (to-string v))) (up-to v)))
+   (define cname   (concat fprefix (to-string v)))
+   (define rtname  (if rtype "R" "void"))
+   
+   (define all-targs
+    (append-all
+    '(
+      `(if rtype '("R") nil)
+      `arg-tys
+     )
+    )
+   )
+
+   (define spec-argl
+    (cond
+     (rtype "")
+     (t     (concat "<" (cdelim (pair "void" arg-tys) ", ") ">"))
+    )
+   )
+
+   (define alloc-targs
+    (append-all
+    '(
+      `(if rtype '("R") '("void"))
+      `arg-tys
+     )
+    )
+   )
+   
+   (define targ-def
+    (cdelim (map (lambda (tname) (concat "typename " tname)) all-targs) ", ")
+   )
+
+   (define cbcall (concat "this->cb(" (cdelim (map (lambda (i) (concat "unwrap<A" (string i) ">::value(xs[" (string i) "])")) (up-to v)) ", ") ")"))
+%>
+template < <%= targ-def %> >
+    class <%= (concat cname spec-argl) %> : public reducefn {
+    public:
+        typedef <%= rtname %> (*action)(<%= (cdelim arg-tys ", ") %>);
+        <%= cname %>(action cb) : cb(cb) { }
+
+		terminal* apply(const inj& j, const terminals& xs) const {<%
+    (if rtype (progn %>
+			return j.apply< <%= rtname %> >(<%= cbcall %>);<%
+	) (progn%>
+			<%= cbcall %>;
+			return 0;<%
+	))%>
+		}
+
+		TypePtr type() const {
+			return fn(ctys(argumentTypes()), cty(resultType()));
+		}
+
+		std::string resultType() const {
+			return typeName< <%= rtname %> >();
+		}
+
+		std::vector<std::string> argumentTypes() const {
+			std::vector<std::string> result;<%
+			(for-each (lambda (arg-ty)%>
+			result.push_back(typeName< <%= arg-ty %> >());<%
+			) arg-tys)%>
+			return result;
+		}
+
+		action value() const { return this->cb; }
+    private:
+        action cb;
+    };
+<%  (if rtype (progn %>
+template < <%= targ-def %> >
+	reducefnp reduceWith(R(*cb)(<%= (cdelim arg-tys ",") %>)) {
+		return reducefnp(new reducefn<%= v %>< <%= (cdelim all-targs ",") %> >(cb));
+    }
+<%  )) %>
+<% )
+
+   ; generate binders for functions with and without return
+   (gen-cfbind "reducefn" t)
+   (gen-cfbind "reducefn" nil)
+  )
+ )
+)
+
+(define ostdo stdout)
+(gen-cfuncs max-args)
+(set stdout ostdo)
+(sprintln "C function bindings up to arity " max-args " have been generated.")
+%>
