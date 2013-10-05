@@ -1,5 +1,5 @@
-<h2>ww : a "lexerless" dynamic LALR(1) parser generator</h2>
-<h3>(named for Walt Whitman, the great Manish Tripathi's favorite poet)</h3>
+<h2>ww : "lexerless" dynamic LALR(1) parsing</h2>
+<h3>(named for Walt Whitman, Manish Tripathi's favorite poet)</h3>
 
 > "Do I contradict myself?  Very well, then, I contradict myself." -- *Walt Whitman*
 
