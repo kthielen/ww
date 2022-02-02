@@ -15,6 +15,8 @@ namespace ww {
 
 // a "terminal" is an opaque value, assumed primitive
 struct terminal {
+	virtual ~terminal() { }
+
 	// format this terminal for output on a text console
 	virtual void show(std::ostream&) const = 0;
 

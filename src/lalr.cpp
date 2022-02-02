@@ -720,6 +720,9 @@ terminal* ambiguity_conflict::failedTerminal() const {
 compile_table_failure::compile_table_failure(const std::string& msg, const grammar& g, const itemset& faileditems, terminal* t) throw() : std::runtime_error(msg), g(g), faileditems(faileditems), t(t) {
 }
 
+compile_table_failure::~compile_table_failure() throw() {
+}
+
 const grammar& compile_table_failure::failedGrammar() const {
 	return this->g;
 }

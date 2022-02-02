@@ -16,9 +16,12 @@ syntax {
 	rule   expr      = x:expr p y:expr -> plus x y.
 	rule   expr      = x:expr t y:expr -> times x y.
 	rule   expr      = x:expr e y:expr -> power x y.
-	rule   statement = e:expr          -> e.
+	rule   statement = e:expr          -> eval e.
+
+  lexeme assign = "<-".
+  rule statement = v:id assign e:expr -> eval e.
 }
 
-// with that out of the way, let us now do a little arithmetic
-1 + 3^2*2
+// with that out of the way, do a little arithmetic and store into a variable
+jimmy <- 1 + 3^2*2
 

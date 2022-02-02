@@ -10,34 +10,81 @@
 
 using namespace ww;
 
+struct E {
+	virtual void show(std::ostream&) const = 0;
+	virtual int value() const = 0;
+};
+
+class I : public E {
+public:
+	I(int x) : x(x) { }
+	void show(std::ostream& out) const { out << this->x; }
+	int value() const { return this->x; }
+private:
+	int x;
+};
+
+class A : public E {
+public:
+	A(const std::string& op, const E* left, const E* right) : op(op), left(left), right(right) { }
+	void show(std::ostream& out) const { out << "("; left->show(out); out << this->op; right->show(out); out << ")"; }
+	const std::string& opname() const { return this->op; }
+	const E* arg0() const { return this->left; }
+	const E* arg1() const { return this->right; }
+
+	int value() const {
+		int a0 = this->left->value();
+		int a1 = this->right->value();
+
+		if (this->op == "+") {
+			return a0 + a1;
+		} else if (this->op == "-") {
+			return a0 - a1;
+		} else if (this->op == "*") {
+			return a0 * a1;
+		} else if (this->op == "/") {
+			return a0 / a1;
+		} else if (this->op == "^") {
+			return pow(a0, a1);
+		} else {
+			std::cout << "impossible" << std::endl;
+			return -1;
+		}
+	}
+private:
+	std::string op;
+	const E* left;
+	const E* right;
+};
+
 // basic environment bindings
-int toIntF(std::string x) {
-	return fromString<int>(x);
+E* toIntF(std::string x) {
+	return new I(fromString<int>(x));
 }
 
-int plusF(int x, int y) {
-	std::cout << x << " + " << y << " = " << (x + y) << std::endl;
-	return x + y;
+E* plusF(E* x, E* y) {
+	return new A("+", x, y);
 }
 
-int minusF(int x, int y) {
-	std::cout << x << " - " << y << " = " << (x - y) << std::endl;
-	return x - y;
+E* minusF(E* x, E* y) {
+	return new A("-", x, y);
 }
 
-int timesF(int x, int y) {
-	std::cout << x << " * " << y << " = " << (x * y) << std::endl;
-	return x * y;
+E* timesF(E* x, E* y) {
+	return new A("*", x, y);
 }
 
-int divideF(int x, int y) {
-	std::cout << x << " / " << y << " = " << (x / y) << std::endl;
-	return x / y;
+E* divideF(E* x, E* y) {
+	return new A("/", x, y);
 }
 
-int powerF(int x, int y) {
-	std::cout << x << " ^ " << y << " = " << pow(x, y) << std::endl;
-	return pow(x, y);
+E* powerF(E* x, E* y) {
+	return new A("^", x, y);
+}
+
+void evalExp(E* e) {
+	e->show(std::cout);
+	std::cout << " = " << e->value() << std::endl;
 }
 
 void declareAxioms(const parser_state_ptr& ps) {
@@ -47,6 +94,7 @@ void declareAxioms(const parser_state_ptr& ps) {
 	define(ps, "times",  reduceWith(&timesF));
 	define(ps, "divide", reduceWith(&divideF));
 	define(ps, "power",  reduceWith(&powerF));
+	define(ps, "eval",   reduceWith(&evalExp));
 }
 
 std::string slurpFile(const std::string& fname) {

@@ -22,6 +22,7 @@ typedef std::map<VarName, unsigned int> VarPos;  // variable->position mappings 
  * types for values referenced in syntax lexemes/rules/actions
  */
 struct Type {
+  virtual ~Type() { }
 	virtual void show(std::ostream&)     const = 0;
 	virtual bool operator==(const Type&) const = 0;
 };
@@ -132,7 +133,7 @@ public:
 		TEnv::const_iterator t = this->tenv.find(vn);
 		if (t != this->tenv.end()) {
 			return t->second;
-		} else if (this->p != 0) {
+		} else if (this->p.get() != 0) {
 			return this->p->lookup(vn);
 		} else {
 			throw std::runtime_error("Undefined variable: " + vn);

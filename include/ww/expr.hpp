@@ -22,6 +22,7 @@ namespace ww {
  * expressions for constructing actions
  */
 struct Expr {
+  virtual ~Expr() { }
 	virtual void show(std::ostream&) const = 0;
 };
 typedef shared_ptr<Expr>     ExprPtr;
