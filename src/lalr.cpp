@@ -193,13 +193,18 @@ terminalset symbolsDerivingNull(const grammar& g) {
 
 	while (changed) {
 		changed = false;
+		terminalset new_potentials;
 		for (terminalset::const_iterator s = potentials.begin(); s != potentials.end(); ++s) {
 			if (nulls.find(*s) == nulls.end() && derivesNull(g, nulls, *s)) {
 				nulls.insert(*s);
-				potentials.erase(*s);
 				changed = true;
 			}
+			else
+			{
+				new_potentials.insert(*s);
+			}
 		}
+		potentials = new_potentials;
 	}
 	return nulls;
 }
