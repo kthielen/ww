@@ -28,8 +28,8 @@ OBJECTS := $(addprefix build/obj/$(TDIR)/, $(addsuffix .o, $(basename $(SOURCES)
 CPPFLAGS := -pthread $(INCDIRS:%=-I%) $(OPTARG) $(PROFARG) -m64 -Wall -Wno-deprecated
 LIBTEXT  := $(addprefix -L, $(LIBDIRS)) $(addprefix -l, $(LIBS))
 
-build/bin/peval : dirs $(OBJECTS)
-	$(CC) $(OBJECTS) $(CPPFLAGS) $(LIBTEXT) -o build/bin/peval
+build/bin/calc : dirs $(OBJECTS)
+	$(CC) $(CPPFLAGS) $(OBJECTS) $(LIBTEXT) -o build/bin/calc
 
 build/obj/$(TDIR)/%.o:%.cpp
 	$(CC) $(CPPFLAGS) -c $< -o $@
@@ -49,4 +49,4 @@ dirs:
 	find . -type d | grep -v "build" | grep -v '\.$$' | awk '{print "build/obj/$(TDIR)/" $$0}' | xargs mkdir -p
 
 clean:
-	rm -rf build/*
+	rm -rf build

@@ -87,6 +87,7 @@ typedef std::string CTypeName;
 typedef std::vector<CTypeName> CTypeNames;
 
 struct reducefn {
+  virtual ~reducefn() { }
 	virtual terminal* apply(const inj&, const terminals&) const = 0;
 	virtual TypePtr type() const = 0;
 };

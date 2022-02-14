@@ -193,13 +193,18 @@ terminalset symbolsDerivingNull(const grammar& g) {
 
 	while (changed) {
 		changed = false;
+		terminalset new_potentials;
 		for (terminalset::const_iterator s = potentials.begin(); s != potentials.end(); ++s) {
 			if (nulls.find(*s) == nulls.end() && derivesNull(g, nulls, *s)) {
 				nulls.insert(*s);
-				potentials.erase(*s);
 				changed = true;
 			}
+			else
+			{
+				new_potentials.insert(*s);
+			}
 		}
+		potentials = new_potentials;
 	}
 	return nulls;
 }
@@ -718,6 +723,9 @@ terminal* ambiguity_conflict::failedTerminal() const {
 }
 
 compile_table_failure::compile_table_failure(const std::string& msg, const grammar& g, const itemset& faileditems, terminal* t) throw() : std::runtime_error(msg), g(g), faileditems(faileditems), t(t) {
+}
+
+compile_table_failure::~compile_table_failure() throw() {
 }
 
 const grammar& compile_table_failure::failedGrammar() const {

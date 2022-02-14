@@ -19,6 +19,7 @@ namespace ww {
 template <typename T>
 	struct primitiveEvaluator {
 		typedef shared_ptr< primitiveEvaluator<T> > ptr;
+    virtual ~primitiveEvaluator() { }
 
 		virtual T eval(terminal*,nat) = 0;
 	};
@@ -26,6 +27,7 @@ template <typename T>
 template <typename T>
 	struct ruleEvaluator {
 		typedef shared_ptr< ruleEvaluator<T> > ptr;
+    virtual ~ruleEvaluator() { }
 
 		virtual T eval(const std::vector<T>&,const nats&,const nats&) = 0;
 	};
@@ -460,7 +462,6 @@ public:
 		this->ev->setDefPrimCB(cb);
 	}
 private:
-	terminal* s;
 	grammar   g;
 	evalp     ev;
 	lpseq     lps;

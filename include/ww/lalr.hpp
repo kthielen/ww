@@ -286,6 +286,7 @@ private:
 class compile_table_failure : public std::runtime_error {
 public:
 	compile_table_failure(const std::string& msg, const grammar& g, const itemset& faileditems, terminal* t) throw();
+	~compile_table_failure() throw();
 
 	const grammar& failedGrammar() const;
 	const itemset& failedItems() const;
@@ -311,7 +312,7 @@ template <typename T>
 			pd(lalr1parser(g, s))
 		{
 			// it's necessary to initialize the LR parser 'late' because we need this->pd initialized first
-			reset(lalrTable(pd, px), p);
+			lrparser<T>::reset(lalrTable(pd, px), p);
 		}
 	private:
 		parserdef pd;

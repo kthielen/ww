@@ -15,7 +15,7 @@
 #ifdef USE_BOOST
 #include <boost/shared_ptr.hpp>
 #else
-#include <tr1/memory>
+#include <memory>
 #endif
 
 namespace ww {
@@ -29,7 +29,7 @@ extern const bool unit;
 #ifdef USE_BOOST
 using boost::shared_ptr;
 #else
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 #endif
 
 template <typename T>

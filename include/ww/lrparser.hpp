@@ -15,6 +15,7 @@ namespace ww {
 
 // a few different types of errors can happen while parsing
 struct parse_error {
+  virtual ~parse_error() { }
 	virtual std::string show() const = 0;
 };
 
@@ -42,7 +43,7 @@ private:
 // we received a token that we weren't looking for
 class unexpected_terminal : public parse_error {
 public:
-	unexpected_terminal(nat s, terminal* r, const terminals& e) : s(s), r(r), e(e) {
+	unexpected_terminal(terminal* r, const terminals& e) : r(r), e(e) {
 		setDefaultDesc();
 	}
 	~unexpected_terminal() throw() {
@@ -53,7 +54,6 @@ public:
 
 	std::string show() const { return this->desc; }
 private:
-	nat         s;
 	terminal*   r;
 	terminals   e;
 	std::string desc;
@@ -155,6 +155,7 @@ typedef std::vector<lrstate> lrstate_table;
 // a user-function to apply to reduce steps
 template <typename T>
 	struct reducer {
+    virtual ~reducer() { }
 		typedef shared_ptr< reducer<T> > ptr;
 		typedef std::vector<T>           Ts;
 
@@ -317,7 +318,7 @@ template <typename T>
 
 		// we received an unexpected token -- gather up all relevant information
 		parsefailp unexpectedTokenFailure(terminal* t) const {
-			return parsefailp(new unexpected_terminal(this->states.top(), t, expecting()));
+			return parsefailp(new unexpected_terminal(t, expecting()));
 		}
 
 		// we encountered an exception while trying to apply a reduce function

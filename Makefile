@@ -34,7 +34,7 @@ CPPFLAGS := -pthread $(INCDIRS:%=-I%) $(OPTARG) $(PROFARG) -m64 -Wall -Wno-depre
 LIBTEXT  := $(addprefix -l, $(LIBS))
 
 build/lib/libww.a: dirs $(OBJECTS)
-	ar -c -r build/lib/libww.a $(OBJECTS)
+	ar rcs build/lib/libww.a $(OBJECTS)
 
 build/obj/$(TDIR)/%.o:%.cpp
 	$(CC) $(CPPFLAGS) -c $< -o $@
@@ -54,4 +54,4 @@ dirs:
 	find . -type d | grep -v "build" | grep -v '\.$$' | awk '{print "build/obj/$(TDIR)/" $$0}' | xargs mkdir -p
 
 clean:
-	rm -rf build
+	rm -rf build/*

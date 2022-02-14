@@ -12,6 +12,7 @@ namespace ww {
 template <typename T>
 	struct stream {
 		typedef shared_ptr< stream<T> > ptr;
+    virtual ~stream() { }
 
 		virtual T next() = 0;
 		virtual bool end() const = 0;
@@ -80,6 +81,7 @@ template <typename T>
 
 template <typename A, typename B>
 	struct function {
+    virtual ~function() { }
 		typedef shared_ptr< function<A, B> > ptr;
 
 		virtual B apply(A) = 0;

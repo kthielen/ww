@@ -20,6 +20,8 @@ namespace ww {
 //  * asked to produce a value (if it's in a completion state)
 template <typename T>
 	struct parser {
+    virtual ~parser() { }
+
 		typedef shared_ptr< parser<T> > ptr;
 		typedef std::vector<ptr>        seq;
 

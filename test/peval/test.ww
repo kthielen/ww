@@ -2,23 +2,23 @@ syntax lexeme w = '//[^\n]*\n' -> null.
 
 // now that we can write comments -- extend this grammar to accept arithmetic expressions
 syntax {
-	assocl p.
-	lexeme p = "+".
-	
-	assocl t before p.
-	lexeme t = "*".
-	
-	assocl e before t.
-	lexeme e = "^".
-	
-	lexeme int       = x:'[0-9]+'      -> toInt x.
-	rule   expr      = x:int           -> x.
-	rule   expr      = x:expr p y:expr -> plus x y.
-	rule   expr      = x:expr t y:expr -> times x y.
-	rule   expr      = x:expr e y:expr -> power x y.
-	rule   statement = e:expr          -> e.
+  assocl p.
+  lexeme p = "+".
+  
+  assocl t before p.
+  lexeme t = "*".
+  
+  assocl e before t.
+  lexeme e = "^".
+  
+  lexeme int       = x:'[0-9]+'      -> toInt x.
+  rule   expr      = x:int           -> x.
+  rule   expr      = x:expr p y:expr -> plus x y.
+  rule   expr      = x:expr t y:expr -> times x y.
+  rule   expr      = x:expr e y:expr -> power x y.
+  rule   statement = e:expr          -> eval e.
 }
 
-// with that out of the way, let us now do a little arithmetic
+// with that out of the way, do a little arithmetic
 1 + 3^2*2
 
